@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+{% block titulo %}Availability{% endblock titulo %}
+{% load static %}
+{% block content %}
+
+<div class="container py-3">
+  <div class="title h1 text-center">Available Rooms</div>
+
+  <div class="container">
+    {% for bed in search %}
+    <div class="card">
+      <div class="row">
+        <div class="col-sm-5">
+          <img class="d-block w-100" src="{{ MEDIA_URL}} {{ bed.image_header.url }}" alt="">
+        </div>
+        <div class="col-sm-7">
+          <div class="card-block">
+            <h4 class="card-title"><strong>{{ bed.name}}</strong></h4>
+            <p class="card-text"><strong>Room type: </strong>{{ bed.roomtype__name}} <br> <strong>Description: </strong>{{ bed.description }}. <strong>People: </strong>{{ bed.roomtype__people }}</p>
+            <p class="card-text"><strong>Price per night: </strong>{{ bed.roomtype__price }}</p>
+            <br>
+            <a href="{% url 'booking' bed.url %}" class="btn btn-primary btn-sm float-justify">Check Availability</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+
+
+{% endblock content %}

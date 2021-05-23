@@ -1,0 +1,20 @@
+{% extends 'index.html' %}
+{% block titulo %}Booking{% endblock titulo %}
+{% load static %}
+{% block content %}
+
+<div class="container py-3">
+  <div class="title h1 text-center">Available Rooms</div>
+
+    <div class="container">
+      <div class="col-lg-12">
+        <h1 class="mt-4">{{booking.name}}</h1>
+        <hr>
+        <p class="lead">{{booking.description}}</p>
+
+      </div>
+    </div>
+</div>
+
+
+{% endblock content %}
