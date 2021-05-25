@@ -1,6 +1,8 @@
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.utils.text  import slugify
+from ckeditor.fields import RichTextField
 
 class Customer(models.Model):
     id = models.AutoField(primary_key = True)
@@ -31,7 +33,7 @@ class Room(models.Model):
     name = models.CharField(max_length = 120)
     roomtype = models.ForeignKey('Roomtype',on_delete=models.CASCADE,)
     status = models.CharField(max_length=1,choices=Status.choices,default=Status.DESOCUPADA,)
-    description = models.TextField()
+    description = RichTextField()
     image_header = models.ImageField(upload_to='rooms/', default = 'rooms/None/no-img.jpg')
     url = models.SlugField(max_length=255, unique=True)
 
@@ -50,14 +52,27 @@ class Room(models.Model):
             url = ''
         return url
 
+def upload_gallery_image(instance, filename):
+    return f"rooms/{instance.room.name}/{filename}"
+
+class ImagesRoom(models.Model):
+    image = models.ImageField(upload_to=upload_gallery_image)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='images')
+
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="150" height="150" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
 class Reservation(models.Model):
     class State(models.TextChoices):
         ESPERA = 'E', _('Espera')
         TOMADA = 'T', _('Tomada')
         CANCELADA = 'C', _('Cancelada')
     id = models.AutoField(primary_key = True)
-    checkin = models.DateTimeField()
-    checkout = models.DateTimeField()
+    checkin = models.DateField()
+    checkout = models.DateField()
     state = models.CharField(max_length=1,choices=State.choices,default=State.ESPERA,)
     adults = models.IntegerField()
     children = models.IntegerField()

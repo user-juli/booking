@@ -1,35 +1,188 @@
-{% extends 'main.html' %}
-{% block titulo %}Availability{% endblock titulo %}
+{% extends 'index.html' %}
+{% block titulo %}Available{% endblock titulo %}
 {% load static %}
 {% block content %}
 
+<!--
 <div class="container py-3">
   <div class="title h1 text-center">Available Rooms</div>
 
-  <div class="container">
-    {% for bed in search %}
-    <div class="card">
-      <div class="row">
-        <div class="col-sm-5">
-          <img class="d-block w-100" src="{{ MEDIA_URL}} {{ bed.image_header.url }}" alt="">
-        </div>
-        <div class="col-sm-7">
-          <div class="card-block">
-            <h4 class="card-title"><strong>{{ bed.name}}</strong></h4>
-            <p class="card-text"><strong>Room type: </strong>{{ bed.roomtype__name}} <br> <strong>Description: </strong>{{ bed.description }}. <strong>People: </strong>{{ bed.roomtype__people }}</p>
-            <p class="card-text"><strong>Price per night: </strong>{{ bed.roomtype__price }}</p>
-            <br>
-            <a href="{% url 'booking' bed.url %}" class="btn btn-primary btn-sm float-justify">Check Availability</a>
-          </div>
-        </div>
+    <div class="container">
+      <div class="col-lg-12">
+        <h1 class="mt-4">{{booking.name}}</h1>
+        <hr>
+        <p class="lead">{{booking.description}}</p>
 
       </div>
     </div>
-    {% endfor %}
+</div> -->
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-lg-4 col-sm-12">
+      <div class="jumbotron jumbotron-fluid sticky-top">
+        <div class="container">
+          <form method="GET" action="search">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <span class="form-label">Check In</span>
+                  <input name="din" class="form-control" type="date">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <span class="form-label">Check out</span>
+                  <input name="dout" class="form-control" type="date">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <span class="form-label">Adults</span>
+                  <select name="a" class="form-control">
+                    <option>{{srooms.adults}}</option>
+                  </select>
+                  <span class="select-arrow"></span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <span class="form-label">Children</span>
+                  <select name="c" class="form-control">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                  </select>
+                  <span class="select-arrow"></span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <input type="submit" class="btn btn-secondary btn-lg btn-block" value="Search">
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8 col-sm-12">
+      <h1 class="mt-4">{{available.name}}</h1>
+      <hr>
+
+      <div id="carouselControls" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+          {% for img in imagesroom %}
+          <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}" data-interval="100">
+            <img src="{{img.image.url}}" class="d-block  w-100" weight="100px" height="300px">
+          </div>
+          {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+
+      <hr>
+      <p class="lead">{{available.description|safe}}</p>
+    </div>
+
+    <!--
+    <div class="col-lg-4 col-sm-12">
+      <div class="jumbotron jumbotron-fluid sticky-top">
+        <div class="container">
+          <a class="btn btn-success btn-lg btn-block" href="#" target="_blank" role="button">Booking Now</a>
+        </div>
+      </div>
+    </div> -->
+
   </div>
 
-</div>
+  <div class="row">
+    <div class="col-lg-4 col-sm-12">
+      <div class="jumbotron jumbotron-fluid sticky-top">
+        <div class="container">
+          <a class="btn btn-secondary btn-lg btn-block" href="#" target="_blank" role="button">Booking Now</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-sm-12">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4">Fluid jumbotron</h1>
+          <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+        </div>
+        <div class="container">
+          <div class="container-fluid text-center text-md-left">
+            <div class="row text-center text-md-left mt-3 pb-3">
+              <div class="col-lg-4 col-md-4 mt-md-0 mt-3 mx-auto">
+                <h5 class="text-uppercase font-weight-bold">Ubicacion</h5>
+                <p class="text-white mx-auto">Calle 1 N° 5B-17, Buenaventura, Valle del Cauca</p>
+              </div>
+              <div class="col-lg-4 col-md-4 mb-3">
+                <h5 class="text-uppercase font-weight-bold">Contacto</h5>
+                <ul class="list-unstyled">
+                  <li><i class="fas fa-phone-square-alt"></i> +573175137056</li>
+                  <li><a href="#"><i class="fas fa-globe"></i> Visitar sitio</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <div class="row">
+    <div class="col-lg-4 col-sm-12">
+    </div>
+    <div class="col-lg-8 col-sm-12">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h5 class="text-uppercase font-weight-bold">Tambien te puede interesar</h5>
+        </div>
+
+          <div class="container py-3">
+            {% for room in rooms %}
+            <div class="card">
+              <div class="row">
+                <div class="col-sm-5">
+                  <img class="d-block w-100" src="{{ MEDIA_URL}} {{ room.image_header.url }}" alt="">
+                </div>
+                <div class="col-sm-7">
+                  <div class="card-block">
+                    <h4 class="card-title"><strong>{{ room.name}}</strong></h4>
+                    <p class="card-text">{{ room.roomtype__name}}</p>
+                    <p class="card-text"><strong>People: </strong>{{ room.roomtype__people }}</p>
+                    <p class="card-text"><strong>Price per night: </strong>{{ room.roomtype__price }}</p>
+                    <br>
+                    <a href="{% url 'available' room.url %}" class="btn btn-primary btn-sm float-justify">Check Availability</a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            {% endfor %}
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+</div>
 
 
 {% endblock content %}

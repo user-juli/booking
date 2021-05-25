@@ -1,0 +1,95 @@
+{% extends 'main.html' %}
+{% block titulo %}Search{% endblock titulo %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-lg-4 col-sm-12">
+      <div class="jumbotron jumbotron-fluid sticky-top">
+        <div class="container">
+          <form method="GET" action="search">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <span class="form-label">Check In</span>
+                  <input name="din" class="form-control" type="date">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <span class="form-label">Check out</span>
+                  <input name="dout" class="form-control" type="date">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <span class="form-label">Adults</span>
+                  <select name="a" class="form-control">
+                    <option>{{srooms.adults}}</option>
+                  </select>
+                  <span class="select-arrow"></span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <span class="form-label">Children</span>
+                  <select name="c" class="form-control">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                  </select>
+                  <span class="select-arrow"></span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <input type="submit" class="btn btn-secondary btn-lg btn-block" value="Search">
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8 col-sm-12">
+      <h1 class="mt-4 text-center">Rooms Found</h1>
+      <hr>
+
+      {% for bed in search %}
+      <div class="card">
+        <div class="row">
+          <div class="col-sm-5">
+            <img class="d-block w-100" src="{{ MEDIA_URL}} {{ bed.image_header.url }}" alt="">
+          </div>
+          <div class="col-sm-7">
+            <div class="card-block">
+              <h4 class="card-title"><strong>{{ bed.name}}</strong></h4>
+              <p class="card-text">{{ bed.roomtype__name }}</p>
+              <p class="card-text"><strong>People: </strong>{{ bed.roomtype__people }}</p>
+              <p class="card-text"><strong>Price per night: </strong>{{ bed.roomtype__price }}</p>
+              <br>
+              <a href="{% url 'available' bed.url %}" class="btn btn-secondary btn-sm float-justify">Check Availability</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+
+
+
+  </div>
+</div>
+
+
+{% endblock content %}

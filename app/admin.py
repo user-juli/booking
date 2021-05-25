@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import Customer,Roomtype,Room,Reservation
+from . models import Customer,Roomtype,Room,Reservation,ImagesRoom
 
 # Register your models here.
 @admin.register(Customer)
@@ -10,9 +10,16 @@ class CustomerAdmin(admin.ModelAdmin):
 class RoomtypeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'people', 'price')
 
+class ImageInline(admin.TabularInline):
+    model = ImagesRoom
+    readonly_fields = ('image_preview',)
+
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'roomtype', 'description', 'image_header', 'status')
+    list_display = ('id', 'name', 'roomtype', 'image_header', 'status')
+    inlines = [
+        ImageInline
+    ]
 
     def get_form(self, request, obj=None, **kwargs):
         self.exclude = ('url', )
